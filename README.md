@@ -1,41 +1,41 @@
-# Remote Control for Windows
+# Remote Control для Windows
 
-A small WPF prototype for direct TCP remote desktop connections. The controller listens for a connection; the client shows a consent prompt before sharing its screen or accepting mouse and keyboard input. The client connection screen opens by default.
+Прототип удалённого рабочего стола для Windows с прямым TCP-подключением. Приложение создано при помощи ИИ. Управляющий компьютер принимает входящее подключение; клиент показывает запрос разрешения до передачи экрана и управления мышью и клавиатурой. При запуске открывается режим клиента.
 
-## Features
+## Возможности
 
-- Controller mode listens on a configurable TCP port and displays the remote desktop.
-- Client mode connects to the controller by IP address and port.
-- Screen sharing and input control start only after the client user approves the request.
-- Closing the client window ends the session.
+- Управляющий компьютер слушает выбранный TCP-порт и показывает удалённый рабочий стол.
+- Клиент подключается по IP-адресу и порту управляющего компьютера.
+- Передача экрана и управление начинаются только после подтверждения на клиентском компьютере.
+- Закрытие окна клиента завершает сеанс.
 
-## Build
+## Скачать
 
-Requires Windows 10/11 and the .NET 8 SDK with Windows Desktop support.
+Готовая автономная версия для Windows x64 доступна в [последнем релизе](https://github.com/windd32/Remote-Control-for-Windows/releases/latest). Отдельно устанавливать .NET не нужно.
+
+## Сборка из исходников
+
+Нужны Windows 10/11 и .NET 8 SDK с поддержкой Windows Desktop.
 
 ```powershell
 dotnet build .\RemoteControl\RemoteControl.csproj -c Release
 ```
 
-To create a self-contained Windows x64 executable:
+Команда для автономного exe:
 
 ```powershell
 dotnet publish .\RemoteControl\RemoteControl.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 ```
 
-## Connect
+## Подключение
 
-1. On the controller PC, select **Controller**, choose a TCP port (default `45831`), and click **Start listening**.
-2. Allow the application through Windows Firewall and forward that TCP port to the controller PC on your router.
-3. On the remote PC, enter the controller's public IP address and port, then click **Connect**.
-4. The remote user must approve the consent prompt on that PC before screen sharing and control begin.
+1. На управляющем компьютере выберите режим **Controller**, укажите порт (по умолчанию `45831`) и нажмите **Start listening**.
+2. Разрешите приложению входящее подключение в брандмауэре Windows и настройте перенаправление выбранного TCP-порта на роутере.
+3. На удалённом компьютере введите публичный IP управляющего компьютера и порт, затем нажмите **Connect**.
+4. Пользователь удалённого компьютера должен разрешить подключение в появившемся окне.
 
-The controller needs a reachable public address and open port. A private/CGNAT address on the client side is fine because the client initiates the outbound connection. If the controller is behind CGNAT, direct inbound IPv4 will not work without public IPv6 or another network arrangement.
+Публичный IP и открытый порт нужны на стороне управляющего компьютера. Серый IP клиента не мешает, так как клиент сам устанавливает исходящее соединение. Если у управляющего компьютера CGNAT, прямое подключение по IPv4 не заработает без публичного IPv6 или другого сетевого решения.
 
-## Security and limitations
+## Безопасность и ограничения
 
-This is an experimental prototype, not a security-reviewed remote access product. The protocol does not encrypt traffic or provide strong peer authentication. Do not expose it to untrusted networks or leave its port open. A production version needs authenticated TLS, secure device pairing, robust error handling, and a security review. Screen capture currently uses the primary monitor at reduced resolution; some protected Windows surfaces may not be captured.
-
-## GitHub description
-
-`Consent-based Windows remote desktop prototype over direct TCP, with screen streaming and mouse/keyboard input.`
+Это экспериментальный прототип, а не проверенный продукт для защищённого удалённого доступа. Соединение не шифруется и не имеет надёжной аутентификации. Не открывайте порт для недоверенных сетей и используйте программу только с доверенными людьми. Для полноценного применения нужны шифрование TLS, безопасное сопряжение компьютеров и аудит безопасности. Захватывается основной монитор с уменьшенным разрешением; некоторые защищённые окна Windows могут не отображаться.
